@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 20px; 
+        }
+        .chart-container { 
+            position: relative; 
+            height: 60vh; 
+            width: 80vw; 
+        }
+        h2 { 
+            color: #333; 
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Relación entre Rating (IMDB) y Recaudación (Gross)</h2>
+    <p>El gráfico muestra que las películas con mayor recaudación (eje Y) no están necesariamente en el extremo derecho de mayor puntuación (eje X).</p>
+    
+    <div class="chart-container">
+        <canvas id="ratingGrossMovieChart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="index.js"></script>
+</body>
+</html>
