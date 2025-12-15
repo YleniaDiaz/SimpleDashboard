@@ -2959,7 +2959,7 @@ const directorsAvgRatingData = [
 ];
 
 // Rating vs gross
-function initRatingGrossChart() {
+const initRatingGrossChart = () => {
     const ctx = document.getElementById('ratingGrossMovieChart').getContext('2d');
     new Chart(ctx, {
         type: 'scatter',
@@ -2998,7 +2998,7 @@ function initRatingGrossChart() {
     });
 }
 
-function initRankingRuntimeMovieChart() {
+const initRankingRuntimeMovieChart = () => {
     const ctx = document.getElementById('rankingRuntimeMovieChart').getContext('2d');
     new Chart(ctx, {
         type: 'scatter',
@@ -3037,7 +3037,7 @@ function initRankingRuntimeMovieChart() {
     });
 }
 
-function initDirectorAvgRatingChart() {
+const initDirectorAvgRatingChart = () => {
     const ctx = document.getElementById('directorsAvgRatingChart').getContext('2d');
     new Chart(ctx, {
         type: 'scatter',
