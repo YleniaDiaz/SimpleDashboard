@@ -2,32 +2,35 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <style>
-        body { 
-            font-family: sans-serif; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            padding: 20px; 
-        }
-        .chart-container { 
-            position: relative; 
-            height: 60vh; 
-            width: 80vw; 
-        }
-        h2 { 
-            color: #333; 
-        }
-    </style>
+    <link rel="icon" type="image/x-icon" href="dashboard-svgrepo-com.svg">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h2>Relación entre Rating (IMDB) y Recaudación (Gross)</h2>
-    <p>El gráfico muestra que las películas con mayor recaudación (eje Y) no están necesariamente en el extremo derecho de mayor puntuación (eje X).</p>
-    
-    <div class="chart-container">
-        <canvas id="ratingGrossMovieChart"></canvas>
+    <header class="dashboard-header">
+        <h1>Data analysis</h1>
+        <p>IMDB (Internet Movie Database) is one of the most popular web sites, 
+            or databases, about movies, TV shows and similar.</p>
+        <p>This dataset contains IMDB Top 250 lists from 1996 to 2020 with
+             every movie's basic information; release year, ranking, score, stars, etc.</p>
+    </header>
+
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <h3>Total movies</h3>
+            <p id="kpi-total">6500</p>
+        </div>
+    </div>
+
+    <div class="charts-grid">
+        <div class="chart-card full-width">
+            <h3>Rating vs. Gross</h3>
+            <div class="canvas-container">
+                <canvas id="ratingGrossMovieChart"></canvas>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

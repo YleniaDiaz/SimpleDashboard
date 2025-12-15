@@ -1,6 +1,6 @@
-
+// Sample of TOP 500
 const ratingGrossMovieData = [
-    { x: 93, y: 2834, title: "The Shawshank Redemption" },      //higher rating
+    { x: 93, y: 2834, title: "The Shawshank Redemption" },
     { x: 92, y: 13497, title: "The Godfather" },
     { x: 90, y: 573, title: "The Godfather: Part II" },
     { x: 89, y: 969, title: "Schindler's List" },
@@ -25,58 +25,47 @@ const ratingGrossMovieData = [
     { x: 83, y: 159, title: "Citizen Kane" },
     { x: 81, y: 3287, title: "Blade Runner" },
     { x: 84, y: 24816, title: "Indiana Jones and the Raiders of the Lost Ark" },
-    { x: 76, y: 93666, title: "Star Wars: Ep VII - Force Awakens" },            //Higher gross
+    { x: 76, y: 93666, title: "Star Wars: Ep VII - Force Awakens" },
     { x: 80, y: 62330, title: "The Avengers" },
     { x: 79, y: 76050, title: "Avatar" }
 ];
 
-const ctx = document.getElementById('ratingGrossMovieChart').getContext('2d');
-
-const myChart = new Chart(ctx, {
-    type: 'scatter',
-    data: {
-        datasets: [{
-            label: 'Movies (Top ranking)',
-            data: ratingGrossMovieData,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            pointRadius: 5,
-            pointHoverRadius: 8
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            tooltip: {
-                callbacks: {
-                    label: function(context) {
-                        let point = context.raw;
-                        return point.title + ': Rating ' + point.x + ', Gross ' + point.y + ' $';
+// Rating vs gross
+function initRatingGrossChart() {
+    const ctx = document.getElementById('ratingGrossMovieChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Movies (Top ranking)',
+                data: ratingGrossMovieData,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                pointRadius: 6,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            let point = context.raw;
+                            return `${point.title}: Rating ${point.x}, $${point.y}`;
+                        }
                     }
                 }
             },
-            title: {
-                display: true,
-                text: 'Rating IMDB vs Gross'
-            }
-        },
-        scales: {
-            x: {
-                title: {
-                    display: true,
-                    text: 'Rating'
-                },
-                min: 70,
-                max: 100
-            },
-            y: {
-                title: {
-                    display: true,
-                    text: 'Gross ($)'
-                },
-                beginAtZero: true
+            scales: {
+                x: { title: { display: true, text: 'Rating IMDB' }, min: 70, max: 100 },
+                y: { title: { display: true, text: 'Gross ($)' }, beginAtZero: true }
             }
         }
-    }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initRatingGrossChart();
 });
