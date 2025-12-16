@@ -1605,7 +1605,9 @@ const initRatingGrossChart = () => {
   });
 };
 
-const initAvgRatingRuntimeMovieChart = () => {
+// Rating vs runtime
+const initAvgRatingRuntimeMoviesChart = () => {
+  const trendlineData = calculateAvgRatingRuntimeMoviesTrendline(averageRatingRuntimeMovieData);
   const ctx = document
     .getElementById("averageRatingRuntimeMovieChart")
     .getContext("2d");
@@ -1621,6 +1623,17 @@ const initAvgRatingRuntimeMovieChart = () => {
           pointRadius: 6,
           pointHoverRadius: 8,
         },
+        {
+          label: "Trend",
+          data: trendlineData,
+          parsing: false,
+          type: "line",
+          borderColor: "rgba(255, 99, 132, 1)",
+          borderWidth: 2,
+          pointRadius: 0, //Without points in line
+          fill: false,
+          tension: 0, //Straight line
+        },
       ],
     },
     options: {
@@ -1634,6 +1647,7 @@ const initAvgRatingRuntimeMovieChart = () => {
         tooltip: {
           callbacks: {
             label: (context) => {
+              if (context.dataset.type === "line") return "Trend";
               let point = context.raw;
               return `AVG rating: ${point.averageRating}, Runtime: ${point.runTime} min`;
             },
@@ -1641,13 +1655,14 @@ const initAvgRatingRuntimeMovieChart = () => {
         },
       },
       scales: {
-        x: { title: { displaratingAvg: true, text: "Runtime (min)" } },
-        y: { title: { displaratingAvg: true, text: "AVG Rating" }, max: 10 },
+        x: { title: { display: true, text: "Runtime (min)" } },
+        y: { title: { display: true, text: "AVG Rating" }, max: 10 },
       },
     },
   });
 };
 
+// Director's avg rating
 const initDirectorAvgRatingChart = () => {
   const ctx = document
     .getElementById("directorsAvgRatingChart")
@@ -1684,43 +1699,16 @@ const initDirectorAvgRatingChart = () => {
         },
       },
       scales: {
-        x: { title: { displaratingAvg: true, text: "Movies count" } },
-        y: { title: { displaratingAvg: true, text: "Rating AVG" } },
+        x: { title: { display: true, text: "Movies count" } },
+        y: { title: { display: true, text: "Rating AVG" } },
       },
     },
   });
 };
 
-//Calculate Trendline
-const calculateTrendline = (data) => {
-  let n = data.length;
-  let sumX = 0,
-    sumY = 0,
-    sumXY = 0,
-    sumXX = 0;
-
-  data.forEach((p) => {
-    sumX += p.year;
-    sumY += p.rating;
-    sumXY += p.year * p.rating;
-    sumXX += p.year * p.year;
-  });
-
-  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-  const intercept = (sumY - slope * sumX) / n;
-
-  //Calculate initial point (min year) y final (max year) to draw the line
-  const minYear = Math.min(...data.map((d) => d.year));
-  const maxYear = Math.max(...data.map((d) => d.year));
-
-  return [
-    { year: minYear, rating: slope * minYear + intercept },
-    { year: maxYear, rating: slope * maxYear + intercept },
-  ];
-};
-
-const initTestChart = () => {
-  const trendlineData = calculateTrendline(ratingMoviesByYearData);
+// Rating movies by year
+const initRatingMoviesByYearChart = () => {
+  const trendlineData = calculateRatingMoviesByYearTrendline(ratingMoviesByYearData);
   const ctx = document
     .getElementById("ratingMoviesByYearChart")
     .getContext("2d");
@@ -1776,9 +1764,66 @@ const initTestChart = () => {
   });
 };
 
+//Calculate AvgRatingRuntimeMovies Trendline
+const calculateAvgRatingRuntimeMoviesTrendline = (data) => {
+  let n = data.length;
+  let sumX = 0,
+    sumY = 0,
+    sumXY = 0,
+    sumXX = 0;
+
+  data.forEach((p) => {
+    const { runTime, averageRating } = p;
+    sumX += runTime;
+    sumY += averageRating;
+    sumXY += runTime * averageRating;
+    sumXX += runTime * runTime;
+  });
+
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+
+  //Calculate initial point (min year) y final (max year) to draw the line
+  const minRunTime = Math.min(...data.map((d) => d.runTime));
+  const maxRunTime = Math.max(...data.map((d) => d.runTime));
+
+  return [
+    { x: minRunTime, y: slope * minRunTime + intercept },
+    { x: maxRunTime, y: slope * maxRunTime + intercept },
+  ];
+};
+
+//Calculate RatingMoviesByYear Trendline
+const calculateRatingMoviesByYearTrendline = (data) => {
+  let n = data.length;
+  let sumX = 0,
+    sumY = 0,
+    sumXY = 0,
+    sumXX = 0;
+
+  data.forEach((p) => {
+    sumX += p.year;
+    sumY += p.rating;
+    sumXY += p.year * p.rating;
+    sumXX += p.year * p.year;
+  });
+
+  const slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+  const intercept = (sumY - slope * sumX) / n;
+
+  //Calculate initial point (min year) y final (max year) to draw the line
+  const minYear = Math.min(...data.map((d) => d.year));
+  const maxYear = Math.max(...data.map((d) => d.year));
+
+  return [
+    { year: minYear, rating: slope * minYear + intercept },
+    { year: maxYear, rating: slope * maxYear + intercept },
+  ];
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   initRatingGrossChart();
-  initAvgRatingRuntimeMovieChart();
+  initAvgRatingRuntimeMoviesChart();
   initDirectorAvgRatingChart();
-  initTestChart();
+  initRatingMoviesByYearChart();
 });
