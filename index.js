@@ -1592,7 +1592,7 @@ const initRatingGrossChart = () => {
           callbacks: {
             label: (context) => {
               let point = context.raw;
-              return `${point.title},: Rating ${point.rating}, $${point.gross},`;
+              return `${point.title}: Rating ${point.rating}, $${point.gross}`;
             },
           },
         },
